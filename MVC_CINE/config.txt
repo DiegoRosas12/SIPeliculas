@@ -1,4 +1,0 @@
-user:diego
-password:12345
-host:localhost
-database:Store
