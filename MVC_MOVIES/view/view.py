@@ -247,27 +247,29 @@ class View:
         print("0. Salir\n") 
 
     def mostrar_un_rol(self, rol):
-        print('Pelicula: ', rol[0])
-        print('Actor: ', rol[1])
-        print('Personaje: ', rol[2])
-        print('Rol: ', rol[3])
+        print('ID Pelicula: ', rol[0])
+        print('Pelicula: ', rol[1])
+        print('ID Actor: ', rol[2])
+        print('Actor: ', rol[3])
+        print('Personaje: ', rol[4])
+        print('Rol: ', rol[5])
 
     def mostrar_todos_roles(self, roles):
-        print('\n' + 'Pelicula'.ljust(5) + '|' + 'Actor'.ljust(20) + '|' + 'Personaje'.ljust(15)+ '|'+'Rol'.ljust(15))   
-
+        print('\n' + 'ID Película'.ljust(11)+'|'+'Pelicula'.ljust(20) + '|' +'ID Actor'+ '|' +'Actor'.ljust(15) + '|' + 'Personaje'.ljust(15)+ '|'+'Rol'.ljust(15)+'|')   
+        print('-'*90)
         for record in roles:
-            print(f'{record[0]:<5}|{record[1]:<20}|{record[2]:<15}|{record[3]:<15}|')
-        print('-'*55)
+            print(f'{record[0]:<11}|{record[1]:<20}|{record[2]:<8}|{record[3]:<15}|{record[4]:<15}|{record[5]:<15}|')
+        print('-'*90)
     
     def mostrar_rol_header(self, header):
         print(header.center(55,'*'))
-        print('-'*55)
+        print('-'*90)
     
     def mostrar_rol_midder(self):
-        print('-'*55)
+        print('-'*90)
 
     def mostrar_rol_footer(self):
-        print('*'*55)
+        print('*'*90)
 
                 
            

@@ -369,7 +369,7 @@ class Model:
         except connector.Error as err:
             return (err)  
 
-    def update_pelicula(self, id, id_genero = '', id_director = '', titulo = '', sinopsis = '', premiere = '', duracion = ''):
+    def update_pelicula(self, id, id_genero = '', id_director = '', titulo = '', sinopsis = '', duracion = '', premiere = '', clasificacion = '', pais = ''):
         fields = []
         val = []
 
@@ -385,12 +385,18 @@ class Model:
         if sinopsis != '':
             val.append(sinopsis)
             fields.append('sinopsis = %s')
-        if premiere != '':
-            val.append(premiere)
-            fields.append('premiere = %s') 
         if duracion != '':
             val.append(duracion)
             fields.append('duracion = %s') 
+        if premiere != '':
+            val.append(premiere)
+            fields.append('premiere = %s') 
+        if clasificacion != '':
+            val.append(clasificacion)
+            fields.append('clasificacion = %s') 
+        if pais != '':
+            val.append(pais)
+            fields.append('pais = %s') 
 
         val.append(id)
         val = tuple(val)         
@@ -437,9 +443,9 @@ class Model:
             self.cnx.rollback()
             return(err)   
 
-    def read_rol(self, id_pelicula, id_actor):
+    def read_un_rol(self, id_pelicula, id_actor):
         try:
-            sql = 'SELECT p.titulo, a.nombre, r.personaje, r.rol FROM roles r, peliculas p, actores a WHERE p.id_pelicula = r.id_pelicula AND a.id_actor = r.id_actor AND r.id_pelicula = %s AND r.id_actor = %s;'
+            sql = 'SELECT p.id_pelicula, p.titulo, a.id_actor, a.nombre, r.personaje, r.rol FROM roles r, peliculas p, actores a WHERE p.id_pelicula = r.id_pelicula AND a.id_actor = r.id_actor AND r.id_pelicula = %s AND r.id_actor = %s;'
             values = (id_pelicula, id_actor)
             self.cursor.execute(sql, values)
             rol = self.cursor.fetchone()
@@ -462,7 +468,7 @@ class Model:
 
     def read_all_roles(self):
         try:
-            sql = 'SELECT * FROM roles;'
+            sql = 'SELECT p.id_pelicula, p.titulo, a.id_actor, a.nombre, r.personaje, r.rol FROM roles r, peliculas p, actores a WHERE p.id_pelicula = r.id_pelicula AND a.id_actor = r.id_actor'
             self.cursor.execute(sql)
             roles = self.cursor.fetchall()
 
@@ -470,7 +476,7 @@ class Model:
         except connector.Error as err:
             return (err)  
 
-    def update_rol(self, id_pelicula, id_actor, id_genero = '', id_director = '', titulo = '', sinopsis = '', premiere = '', duracion = ''):
+    def update_rol(self, id_pelicula, id_actor, personaje = '', rol = ''):
         fields = []
         val = []
 
@@ -482,7 +488,8 @@ class Model:
             fields.append('rol = %s')
         
 
-        val.append(id)
+        val.append(id_pelicula)
+        val.append(id_actor)
         val = tuple(val)         
         try:
             sql = 'UPDATE roles SET ' + ','.join(fields) +' WHERE id_pelicula =%s and id_actor = %s;'
