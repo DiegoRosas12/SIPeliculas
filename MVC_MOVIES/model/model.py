@@ -31,7 +31,7 @@ class Model:
     ##########################################################################
     def create_actor(self, nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais):
         try:
-            sql = 'INSERT INTO actores(nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais) VALUES(%s,%s,%s,%s,%s,%s)'
+            sql = 'INSERT INTO actores(nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais) VALUES(%s,%s,%s,%s,%s,%s);'
             values = (nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais)
 
             self.cursor.execute(sql, values)
@@ -40,39 +40,43 @@ class Model:
             return True
         except connector.Error as err:
             self.cnx.rollback()
+            print(err)
             return(err)   
 
     def read_actor(self, id):
         try:
-            sql = 'SELECT * FROM actores WHERE id_actor = %s'
+            sql = 'SELECT * FROM actores WHERE id_actor = %s;'
             values = (id,)
             self.cursor.execute(sql, values)
             actor = self.cursor.fetchone()
 
             return actor
         except connector.Error as err:
+            print(err)
             return (err)
 
-    def read_actor_name(self, name):
+    def read_actores_nombre(self, nombre):
         try:
-            sql = 'SELECT * FROM actores WHERE nombre LIKE %s'
-            values = (name,)
+            sql = 'SELECT * FROM actores WHERE nombre LIKE %s;'
+            values = (nombre,)
             self.cursor.execute(sql, values)
-            actor = self.cursor.fetchone()
+            actores = self.cursor.fetchall()
 
-            return actor
+            return actores
         except connector.Error as err:
+            print(err)
             return (err)
 
 
     def read_all_actores(self):
         try:
-            sql = 'SELECT * FROM actores'
+            sql = 'SELECT * FROM actores;'
             self.cursor.execute(sql)
-            actor = self.cursor.fetchall()
+            actores = self.cursor.fetchall()
 
-            return actor
+            return actores
         except connector.Error as err:
+            print(err)
             return (err)  
 
     def update_actor(self, id, nombre = '', apellido_paterno = '', apellido_materno = '', fecha_nacimiento = '', sexo = '', pais= ''):
@@ -101,7 +105,7 @@ class Model:
         val.append(id)
         val = tuple(val)         
         try:
-            sql = 'UPDATE actores SET ' + ','.join(fields) +' WHERE id_actor =%s'
+            sql = 'UPDATE actores SET ' + ','.join(fields) +' WHERE id_actor =%s;'
 
             self.cursor.execute(sql,val)
             self.cnx.commit()
@@ -111,11 +115,12 @@ class Model:
 
         except connector.Error as err:
             self.cnx.rollback()
+            print(err)
             return(err)
 
     def delete_actor(self, id):
         try:
-            sql = 'DELETE  FROM actores WHERE id_actor = %s'
+            sql = 'DELETE  FROM actores WHERE id_actor = %s;'
             values = (id,)
 
             self.cursor.execute(sql, values)
@@ -126,14 +131,15 @@ class Model:
             
         except connector.Error as err:
             self.cnx.rollback()
+            print(err)
             return (err)
 
     ######################     metodos de directores          ###################
     ##########################################################################
     def create_director(self, nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais):
         try:
-            sql = 'INSERT INTO directores(nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais) VALUES(%s,%s,%s,%s,%s,%s)'
-            values = (nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais)
+            sql = 'INSERT INTO directores(nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais) VALUES(%s,%s,%s,%s,%s,%s);'
+            values = (nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais,)
 
             self.cursor.execute(sql, values)
             self.cnx.commit()
@@ -141,11 +147,12 @@ class Model:
             return True
         except connector.Error as err:
             self.cnx.rollback()
+            print(err)
             return(err)   
 
     def read_director(self, id):
         try:
-            sql = 'SELECT * FROM directores WHERE id_director = %s'
+            sql = 'SELECT * FROM directores WHERE id_director = %s;'
             values = (id,)
             self.cursor.execute(sql, values)
             director = self.cursor.fetchone()
@@ -154,20 +161,21 @@ class Model:
         except connector.Error as err:
             return (err)  
 
-    def read_director_name(self, id):
+    def read_directores_nombre(self, nombre):
         try:
-            sql = 'SELECT * FROM directores WHERE nombre LIKE %s'
-            values = (id,)
+            sql = 'SELECT * FROM actores WHERE nombre LIKE %s;'
+            values = (nombre,)
             self.cursor.execute(sql, values)
-            director = self.cursor.fetchone()
+            directores = self.cursor.fetchall()
 
-            return director
+            return directores
         except connector.Error as err:
-            return (err) 
+            print(err)
+            return (err)
 
     def read_all_directores(self):
         try:
-            sql = 'SELECT * FROM directores'
+            sql = 'SELECT * FROM directores;'
             self.cursor.execute(sql)
             director = self.cursor.fetchall()
 
@@ -202,7 +210,7 @@ class Model:
         val.append(id)
         val = tuple(val)         
         try:
-            sql = 'UPDATE directores SET ' + ','.join(fields) +' WHERE id_director =%s'
+            sql = 'UPDATE directores SET ' + ','.join(fields) +' WHERE id_director =%s;'
 
             self.cursor.execute(sql,val)
             self.cnx.commit()
@@ -216,9 +224,9 @@ class Model:
 
     def delete_director(self, id):
         try:
-            sql = 'DELETE  FROM directores WHERE id_director = %s'
+            sql = 'DELETE  FROM directores WHERE id_director = %s;'
             values = (id,)
-
+            print(sql,values)
             self.cursor.execute(sql, values)
             self.cnx.commit()
             count = self.cursor.rowcount
@@ -231,10 +239,10 @@ class Model:
     ######################     metodos de generos          ###################
     ##########################################################################
 
-    def create_genero(self, nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais):
+    def create_genero(self, descripcion):
         try:
-            sql = 'INSERT INTO generos(descripcion) VALUES(%s)'
-            values = (descripcion)
+            sql = 'INSERT INTO generos(descripcion) VALUES(%s);'
+            values = (descripcion,)
 
             self.cursor.execute(sql, values)
             self.cnx.commit()
@@ -246,22 +254,34 @@ class Model:
 
     def read_genero(self, id):
         try:
-            sql = 'SELECT * FROM generos WHERE id_genero = %s'
+            sql = 'SELECT * FROM generos WHERE id_genero = %s;'
             values = (id,)
             self.cursor.execute(sql, values)
             genero = self.cursor.fetchone()
 
             return genero
         except connector.Error as err:
-            return (err)  
+            return (err)
+    
+    def read_genero_nombre(self, nombre):
+        try:
+            sql = 'SELECT * FROM generos WHERE descripcion LIKE %s;'
+            values = (nombre,)
+            self.cursor.execute(sql, values)
+            genero = self.cursor.fetchone()
+
+            return genero
+        except connector.Error as err:
+            print(err)
+            return (err)
 
     def read_all_generos(self):
         try:
-            sql = 'SELECT * FROM generos'
+            sql = 'SELECT * FROM generos;'
             self.cursor.execute(sql)
-            genero = self.cursor.fetchall()
+            generos = self.cursor.fetchall()
 
-            return genero
+            return generos
         except connector.Error as err:
             return (err)  
 
@@ -276,7 +296,7 @@ class Model:
         val.append(id)
         val = tuple(val)         
         try:
-            sql = 'UPDATE generos SET ' + ','.join(fields) +' WHERE id_genero =%s'
+            sql = 'UPDATE generos SET ' + ','.join(fields) +' WHERE id_genero =%s;'
 
             self.cursor.execute(sql,val)
             self.cnx.commit()
@@ -290,7 +310,7 @@ class Model:
 
     def delete_genero(self, id):
         try:
-            sql = 'DELETE  FROM generos WHERE id_genero = %s'
+            sql = 'DELETE  FROM generos WHERE id_genero = %s;'
             values = (id,)
 
             self.cursor.execute(sql, values)
@@ -305,7 +325,7 @@ class Model:
     ##########################################################################
     def create_pelicula(self, id_genero, id_director, titulo, sinopsis, premiere, duracion):
         try:
-            sql = 'INSERT INTO peliculas(id_genero, id_director, titulo, sinopsis, premiere, duracion) VALUES(%s,%s,%s,%s,%s,%s)'
+            sql = 'INSERT INTO peliculas(id_genero, id_director, titulo, sinopsis, premiere, duracion) VALUES(%s,%s,%s,%s,%s,%s);'
             values = (id_genero, id_director, titulo, sinopsis, premiere, duracion)
 
             self.cursor.execute(sql, values)
@@ -318,18 +338,30 @@ class Model:
 
     def read_pelicula(self, id):
         try:
-            sql = 'SELECT * FROM peliculas WHERE id_pelicula = %s'
+            sql = 'SELECT * FROM peliculas WHERE id_pelicula = %s;'
             values = (id,)
             self.cursor.execute(sql, values)
             pelicula = self.cursor.fetchone()
 
             return pelicula
         except connector.Error as err:
-            return (err)  
+            return (err)
+    
+    def read_peliculas_titulo(self, nombre):
+        try:
+            sql = 'SELECT * FROM peliculas WHERE titulo LIKE %s;'
+            values = (nombre,)
+            self.cursor.execute(sql, values)
+            peliculas = self.cursor.fetchone()
+
+            return peliculas
+        except connector.Error as err:
+            print(err)
+            return (err)
 
     def read_all_peliculas(self):
         try:
-            sql = 'SELECT * FROM peliculas'
+            sql = 'SELECT * FROM peliculas;'
             self.cursor.execute(sql)
             pelicula = self.cursor.fetchall()
 
@@ -363,7 +395,7 @@ class Model:
         val.append(id)
         val = tuple(val)         
         try:
-            sql = 'UPDATE peliculas SET ' + ','.join(fields) +' WHERE id_pelicula =%s'
+            sql = 'UPDATE peliculas SET ' + ','.join(fields) +' WHERE id_pelicula =%s;'
 
             self.cursor.execute(sql,val)
             self.cnx.commit()
@@ -377,7 +409,7 @@ class Model:
 
     def delete_pelicula(self, id):
         try:
-            sql = 'DELETE  FROM peliculas WHERE id_pelicula = %s'
+            sql = 'DELETE  FROM peliculas WHERE id_pelicula = %s;'
             values = (id,)
 
             self.cursor.execute(sql, values)
@@ -390,11 +422,11 @@ class Model:
             self.cnx.rollback()
             return (err)
 
-    ######################   metodos de actores_pelicula     #################
+    ######################   metodos de actores_pelicula (roles)     #################
     ##########################################################################
-    def create_actor_pelicula(self, id_pelicula, id_actor, personaje, rol):
+    def create_rol(self, id_pelicula, id_actor, personaje, rol):
         try:
-            sql = 'INSERT INTO actores_peliculas(id_pelicula, id_actor, personaje, rol) VALUES(%s,%s,%s,%s)'
+            sql = 'INSERT INTO roles(id_pelicula, id_actor, personaje, rol) VALUES(%s,%s,%s,%s);'
             values = (id_pelicula, id_actor, personaje, rol)
 
             self.cursor.execute(sql, values)
@@ -405,28 +437,40 @@ class Model:
             self.cnx.rollback()
             return(err)   
 
-    def read_actor_pelicula(self, id_pelicula, id_actor):
+    def read_rol(self, id_pelicula, id_actor):
         try:
-            sql = 'SELECT p.titulo, a.nombre, a.apellido_paterno, a.apellido_materno, ap.personaje, ap.rol FROM actores_peliculas ac, peliculas p, actores a WHERE p.id_pelicula = ap.id_pelicula AND a.id_actor = ap.id_actor AND ap.id_pelicula = %s AND ap.id_actor = %s'
+            sql = 'SELECT p.titulo, a.nombre, r.personaje, r.rol FROM roles r, peliculas p, actores a WHERE p.id_pelicula = r.id_pelicula AND a.id_actor = r.id_actor AND r.id_pelicula = %s AND r.id_actor = %s;'
             values = (id_pelicula, id_actor)
             self.cursor.execute(sql, values)
-            actor_pelicula = self.cursor.fetchone()
+            rol = self.cursor.fetchone()
 
-            return actor_pelicula
+            return rol
         except connector.Error as err:
-            return (err)  
-
-    def read_all_actores_peliculas(self):
+            return (err)
+    
+    def read_roles_nombre(self, nombre):
         try:
-            sql = 'SELECT * FROM actores_peliculas'
-            self.cursor.execute(sql)
-            actores_peliculas = self.cursor.fetchall()
+            sql = 'SELECT * FROM roles WHERE rol LIKE %s;'
+            values = (nombre,)
+            self.cursor.execute(sql, values)
+            roles = self.cursor.fetchone()
 
-            return actores_peliculas
+            return roles
+        except connector.Error as err:
+            print(err)
+            return (err)
+
+    def read_all_roles(self):
+        try:
+            sql = 'SELECT * FROM roles;'
+            self.cursor.execute(sql)
+            roles = self.cursor.fetchall()
+
+            return roles
         except connector.Error as err:
             return (err)  
 
-    def update_actor_pelicula(self, id_pelicula, id_actor, id_genero = '', id_director = '', titulo = '', sinopsis = '', premiere = '', duracion = ''):
+    def update_rol(self, id_pelicula, id_actor, id_genero = '', id_director = '', titulo = '', sinopsis = '', premiere = '', duracion = ''):
         fields = []
         val = []
 
@@ -441,21 +485,17 @@ class Model:
         val.append(id)
         val = tuple(val)         
         try:
-            sql = 'UPDATE actores_peliculas SET ' + ','.join(fields) +' WHERE id_pelicula =%s and id_actor = %s'
-
+            sql = 'UPDATE roles SET ' + ','.join(fields) +' WHERE id_pelicula =%s and id_actor = %s;'
             self.cursor.execute(sql,val)
             self.cnx.commit()
-
             return True
-
-
         except connector.Error as err:
             self.cnx.rollback()
             return(err)
 
-    def delete_actor_pelicula(self, id_pelicula, id_actor):
+    def delete_rol(self, id_pelicula, id_actor):
         try:
-            sql = 'DELETE  FROM actores_peliculas WHERE id_pelicula = %s AND id_actor = %s'
+            sql = 'DELETE  FROM roles WHERE id_pelicula = %s AND id_actor = %s;'
             values = (id_pelicula, id_actor)
 
             self.cursor.execute(sql, values)
