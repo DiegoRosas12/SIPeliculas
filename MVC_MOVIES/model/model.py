@@ -323,11 +323,11 @@ class Model:
             return (err)
     ######################     metodos de peliculas        ###################
     ##########################################################################
-    def create_pelicula(self, id_genero, id_director, titulo, sinopsis, premiere, duracion):
+    def create_pelicula(self, id_genero, id_director, titulo, sinopsis, duracion, premiere, clasificacion, pais):
         try:
-            sql = 'INSERT INTO peliculas(id_genero, id_director, titulo, sinopsis, premiere, duracion) VALUES(%s,%s,%s,%s,%s,%s);'
-            values = (id_genero, id_director, titulo, sinopsis, premiere, duracion)
-
+            sql = 'INSERT INTO peliculas(id_genero, id_director, titulo, sinopsis, duracion, premiere, clasificacion, pais) VALUES(%s,%s,%s,%s,%s,%s,%s,%s);'
+            values = (id_genero, id_director, titulo, sinopsis, duracion, premiere, clasificacion, pais)
+            print(sql,values)
             self.cursor.execute(sql, values)
             self.cnx.commit()
 
@@ -361,11 +361,11 @@ class Model:
 
     def read_all_peliculas(self):
         try:
-            sql = 'SELECT * FROM peliculas;'
+            sql = 'SELECT p.id_pelicula, g.descripcion, d.apellido_paterno, p.titulo, p.sinopsis, p.duracion, p.premiere, p.clasificacion, p.pais FROM peliculas p, generos g, directores d WHERE p.id_genero = g.id_genero AND p.id_director = d.id_director;'
             self.cursor.execute(sql)
-            pelicula = self.cursor.fetchall()
+            peliculas = self.cursor.fetchall()
 
-            return pelicula
+            return peliculas
         except connector.Error as err:
             return (err)  
 

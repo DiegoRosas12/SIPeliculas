@@ -164,7 +164,7 @@ class View:
         print('Descripción: ', genero[1])
 
     def mostrar_todos_generos(self, generos):
-        print('\n' + 'ID'.ljust(4) + '|' + 'Descripción'.ljust(25))   
+        print('\n' + 'ID'.ljust(4) + '|' + 'Descripción'.ljust(24))   
 
         for record in generos:
             print(f'{record[0]:<4}|{record[1]:<25}|')
@@ -206,26 +206,26 @@ class View:
         print('Titulo: ', pelicula[3])
         print('Sinopsis: ', pelicula[4])
         print('Duración: ', pelicula[5])
-        print('Fecha estreno: ', pelicula[6])
+        print('Premiere: ', pelicula[6])
         print('Clasificación: ', pelicula[7])
         print('País: ', pelicula[8])
 
     def mostrar_todas_peliculas(self, peliculas):
-        print('\n' + 'ID'.ljust(4) + '|' + 'Género'.ljust(15) + '|' + 'Director'.ljust(15)+ '|'+'Titulo'.ljust(15)+'|'+'Sinopsis'.ljust(20)+'|' +' Duración'.ljust(8)+'|' +' Fecha estreno'.ljust(8)+'|' +' Clasificación'.ljust(4)+'|' +' País'.ljust(15))   
-
+        print('\n' + 'ID'.ljust(3) + '|' + 'Género'.ljust(7) + '|' + 'Director'.ljust(10)+ '|'+'Titulo'.ljust(15)+'|'+'Sinopsis'.ljust(28)+'|' +'Duración'.ljust(8)+'|' +'Clasificación'.ljust(4)+'|' +' País'.ljust(15) +'|'+' Fecha estreno'.ljust(8))   
+        print('-'*126)
         for record in peliculas:
-            print(f'{record[0]:<4}|{record[1]:<15}|{record[2]:<15}|{record[3]:<15}|{record[4]:<20}|{record[5]:<8}|{record[6]:<8}|{record[6]:<4}|{record[6]:<15}')
-        print('-'*104)
+            print(f'{record[0]:<3}|{record[1]:<7}|{record[2]:<10}|{record[3]:<15}|{record[4]:<28}|{record[5]:<8}|{record[7]:<13}|{record[8]:<15}|{record[6]}')
+        print('-'*126)
     
     def mostrar_pelicula_header(self, header):
         print(header.center(104,'*'))
-        print('-'*104)
+        print('-'*126)
     
     def mostrar_pelicula_midder(self):
-        print('-'*104)
+        print('-'*126)
 
     def mostrar_pelicula_footer(self):
-        print('*'*104)
+        print('*'*126)
 
     
     """
