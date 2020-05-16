@@ -72,7 +72,7 @@ class Controller:
                 self.view.opcion_invalid()
         return
     
-    def ask_autor(self):
+    def ask_actor(self):
         self.view.ask('Nombre(s): ')
         a_name = input()
         self.view.ask('Apellido paterno: ')
@@ -88,12 +88,12 @@ class Controller:
         return [a_name, a_apellido1, a_apellido2, a_birth, a_sexo, a_pais]
     
     def create_actor(self):
-        a_name, a_apellido1, a_apellido2, a_birth, a_sexo, a_pais = self.ask_autor()
+        a_name, a_apellido1, a_apellido2, a_birth, a_sexo, a_pais = self.ask_actor()
         out = self.model.create_actor(a_name, a_apellido1, a_apellido2, a_birth, a_sexo, a_pais)
         if out == True:
             self.view.ok(a_name+' '+a_apellido1, 'agregó')
         else:
-            self.view.error('No se pudo agregar al autor.')
+            self.view.error('No se pudo agregar al actor.')
         return
     
     def read_actor(self):
@@ -150,18 +150,18 @@ class Controller:
                 self.view.error('Problema para leer actor.')
             return
         self.view.msg('Ingresa los valores a modificar (vacío para dejarlo igual):')
-        a_name, a_apellido1, a_apellido2, a_birth, a_sexo, a_pais = self.ask_autor()
+        a_name, a_apellido1, a_apellido2, a_birth, a_sexo, a_pais = self.ask_actor()
         out = self.model.update_actor(a_id, a_name, a_apellido1, a_apellido2, a_birth, a_sexo, a_pais)
         if out == True:
             self.view.ok(a_id, 'actualizó')
         else:
-            self.view.error('No se pudo actualizar el autor.')
+            self.view.error('No se pudo actualizar el actor.')
         return
     
     def delete_actor(self):
         self.view.ask('ID de actor a borrar: ')
         a_id = input()
-        self.view.ask('¿Seguro que desea borrar a este autor? (S = Sí) ')
+        self.view.ask('¿Seguro que desea borrar a este actor? (S = Sí) ')
         confirm = input()
         if confirm.lower() == 's':
             count = self.model.delete_actor(a_id)
@@ -169,9 +169,9 @@ class Controller:
                 self.view.ok(a_id, 'borró')
             else:
                 if count == 0:
-                    self.view.error('El autor NO existe.')
+                    self.view.error('El actor NO existe.')
                 else:
-                    self.view.error('Error al borrar autor.')
+                    self.view.error('Error al borrar actor.')
         else:
-            self.view.msg('El autor no se borrará. Cancelando operación...')
+            self.view.msg('El actor no se borrará. Cancelando operación...')
         return
