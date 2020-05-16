@@ -31,8 +31,12 @@ class Model:
     ##########################################################################
     def create_actor(self, nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais):
         try:
-            sql = 'INSERT INTO actores(nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais) VALUES(%s,%s,%s,%s,%s,%s);'
-            values = (nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais)
+            if apellido_materno != '':
+                sql = 'INSERT INTO actores(nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais) VALUES(%s,%s,%s,%s,%s,%s);'
+                values = (nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais)
+            else:
+                sql = 'INSERT INTO actores(nombre, apellido_paterno, fecha_nacimiento, sexo, pais) VALUES(%s,%s,%s,%s,%s);'
+                values = (nombre, apellido_paterno, fecha_nacimiento, sexo, pais)
 
             self.cursor.execute(sql, values)
             self.cnx.commit()
@@ -79,7 +83,7 @@ class Model:
             print(err)
             return (err)  
 
-    def update_actor(self, id, nombre = '', apellido_paterno = '', apellido_materno = '', fecha_nacimiento = '', sexo = '', pais= ''):
+    def update_actor(self, id, nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais):
         fields = []
         val = []
 
@@ -105,7 +109,7 @@ class Model:
         val.append(id)
         val = tuple(val)         
         try:
-            sql = 'UPDATE actores SET ' + ','.join(fields) +' WHERE id_actor =%s;'
+            sql = 'UPDATE actores SET ' + ','.join(fields) +' WHERE id_actor = %s;'
 
             self.cursor.execute(sql,val)
             self.cnx.commit()
@@ -290,13 +294,13 @@ class Model:
         val = []
 
         if descripcion !='':
-            val.append(nombre)
-            fields.append('nombre = %s')
+            val.append(descripcion)
+            fields.append('descripcion = %s')
 
         val.append(id)
         val = tuple(val)         
         try:
-            sql = 'UPDATE generos SET ' + ','.join(fields) +' WHERE id_genero =%s;'
+            sql = 'UPDATE generos SET ' + ','.join(fields) +' WHERE id_genero = %s;'
 
             self.cursor.execute(sql,val)
             self.cnx.commit()

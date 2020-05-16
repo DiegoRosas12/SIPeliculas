@@ -69,3 +69,4 @@ CREATE TABLE IF NOT EXISTS peliculas (
     ON UPDATE CASCADE,
   PRIMARY KEY (id_pelicula, id_actor)
   )ENGINE = InnoDB;
+
