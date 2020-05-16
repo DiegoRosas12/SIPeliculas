@@ -29,7 +29,7 @@ class Controller:
             if o == '1':
                 self.menu_actor()
             elif o == '2':
-                #self.menu_director()
+                self.menu_director()
                 pass
             elif o == '3':
                 #self.menu_genero()
@@ -70,7 +70,6 @@ class Controller:
                 return
             else:
                 self.view.opcion_invalid()
-        return
     
     def ask_actor(self):
         self.view.ask('Nombre(s): ')
@@ -174,4 +173,135 @@ class Controller:
                     self.view.error('Error al borrar actor.')
         else:
             self.view.msg('El actor no se borrará. Cancelando operación...')
+        return
+    
+    """
+    ************************
+    * Director controllers *
+    ************************
+    """
+    def menu_director(self):
+        while True:
+            self.view.menu_director()
+            self.view.select_opcion()
+            o = input()
+            if o == '1':
+                self.create_director()
+            elif o == '2':
+                self.read_director()
+            elif o == '3':
+                self.read_all_directores()
+            elif o == '4':
+                self.read_directores_nombre()
+            elif o == '5':
+                self.update_director()
+            elif o == '6':
+                self.delete_director()
+            elif o == '0':
+                return
+            else:
+                self.view.opcion_invalid()
+
+    def ask_director(self):
+        self.view.ask('Nombre(s): ')
+        d_name = input()
+        self.view.ask('Apellido paterno: ')
+        d_apellido1 = input()
+        self.view.ask('Apellido materno: ')
+        d_apellido2 = input()
+        self.view.ask('Fecha de nacimiento (AAAA-MM-DD): ')
+        d_birth = input()
+        self.view.ask('Sexo (H, M): ')
+        d_sexo = input()
+        self.view.ask('País: ')
+        d_pais = input()
+        return [d_name, d_apellido1, d_apellido2, d_birth, d_sexo, d_pais]
+    
+    def create_director(self):
+        d_name, d_apellido1, d_apellido2, d_birth, d_sexo, d_pais = self.ask_director()
+        out = self.model.create_director(d_name, d_apellido1, d_apellido2, d_birth, d_sexo, d_pais)
+        if out == True:
+            self.view.ok(d_name+' '+d_apellido1, 'agregó')
+        else:
+            self.view.error('No se pudo agregar al director.')
+        return
+    
+    def read_director(self):
+        self.view.ask('ID del director: ')
+        d_id = input()
+        director = self.model.read_director(d_id)
+        if type(director) == tuple:
+            self.view.mostrar_director_header(' Datos del director '+d_id+' ')
+            self.view.mostrar_un_director(director)
+            self.view.mostrar_director_midder()
+            self.view.mostrar_director_footer()
+        else:
+            if director == None:
+                self.view.error('El director NO existe.')
+            else:
+                self.view.error('Problema para leer director.')
+        return
+
+    def read_all_directores(self):
+        directores = self.model.read_all_directores()
+        if type(directores) == list:
+            self.view.mostrar_todos_directores(directores)
+        else:
+            self.view.error('Error al leer todos los directores.')
+        return
+    
+    def read_directores_nombre(self):
+        self.view.ask('Nombre(s) del director: ')
+        d_nombre = input()
+        directores = self.model.read_directores_nombre(d_nombre)
+        if type(directores) == list:
+            self.view.mostrar_director_header(' Directores cuyo nombre es '+d_nombre+' ')
+            for director in directores:
+                self.view.mostrar_un_director(director)
+                self.view.mostrar_director_midder()
+            self.view.mostrar_director_footer()
+        else:
+            self.view.error('Error al leer lista de directores.')
+        return
+    
+    def update_director(self):
+        self.view.ask('ID de director a modificar: ')
+        d_id = input()
+        director = self.model.read_director(d_id)
+        if type(director) == tuple:
+            self.view.mostrar_director_header(' Datos del director '+d_id+' ')
+            self.view.mostrar_un_director(director)
+            self.view.mostrar_director_midder()
+            self.view.mostrar_director_footer()
+        else:
+            if director == None:
+                self.view.error('El director NO existe.')
+            else:
+                self.view.error('Problema para leer director.')
+            return
+        self.view.msg('Ingresa los valores a modificar (vacío para dejarlo igual):')
+        d_name, d_apellido1, d_apellido2, d_birth, d_sexo, d_pais = self.ask_director()
+        out = self.model.update_director(d_id, d_name, d_apellido1, d_apellido2, d_birth, d_sexo, d_pais)
+        if out == True:
+            self.view.ok(d_id, 'actualizó')
+        else:
+            self.view.error('No se pudo actualizar el director.')
+        return
+    
+    def delete_director(self):
+        self.view.ask('ID de director a borrar: ')
+        d_id = input()
+        self.view.ask('¿Seguro que desea borrar a este director? (S = Sí) ')
+        confirm = input()
+        if confirm.lower() == 's':
+            count = self.model.delete_director(d_id)
+            if count != 0:
+                self.view.ok(d_id, 'borró')
+            else:
+                if count == 0:
+                    self.view.error('El director NO existe.')
+                else:
+                    self.view.error('Error al borrar director.')
+        else:
+            self.view.msg('El director no se borrará. Cancelando operación...')
         return

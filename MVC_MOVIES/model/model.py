@@ -142,8 +142,12 @@ class Model:
     ##########################################################################
     def create_director(self, nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais):
         try:
-            sql = 'INSERT INTO directores(nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais) VALUES(%s,%s,%s,%s,%s,%s);'
-            values = (nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais,)
+            if apellido_materno != '':
+                sql = 'INSERT INTO directores(nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais) VALUES(%s,%s,%s,%s,%s,%s);'
+                values = (nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais)
+            else:
+                sql = 'INSERT INTO directores(nombre, apellido_paterno, fecha_nacimiento, sexo, pais) VALUES(%s,%s,%s,%s,%s);'
+                values = (nombre, apellido_paterno, fecha_nacimiento, sexo, pais)
 
             self.cursor.execute(sql, values)
             self.cnx.commit()
@@ -167,7 +171,7 @@ class Model:
 
     def read_directores_nombre(self, nombre):
         try:
-            sql = 'SELECT * FROM actores WHERE nombre LIKE %s;'
+            sql = 'SELECT * FROM directores WHERE nombre LIKE %s;'
             values = (nombre,)
             self.cursor.execute(sql, values)
             directores = self.cursor.fetchall()
@@ -214,7 +218,7 @@ class Model:
         val.append(id)
         val = tuple(val)         
         try:
-            sql = 'UPDATE directores SET ' + ','.join(fields) +' WHERE id_director =%s;'
+            sql = 'UPDATE directores SET ' + ','.join(fields) +' WHERE id_director = %s;'
 
             self.cursor.execute(sql,val)
             self.cnx.commit()
@@ -228,9 +232,9 @@ class Model:
 
     def delete_director(self, id):
         try:
-            sql = 'DELETE  FROM directores WHERE id_director = %s;'
+            sql = 'DELETE FROM directores WHERE id_director = %s;'
             values = (id,)
-            print(sql,values)
+
             self.cursor.execute(sql, values)
             self.cnx.commit()
             count = self.cursor.rowcount

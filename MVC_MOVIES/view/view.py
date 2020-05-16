@@ -130,7 +130,10 @@ class View:
         print('\n' + 'ID'.ljust(3) + '|' + 'Nombre(s)'.ljust(10) + '|' + 'A. Paterno'.ljust(10)+ '|'+'A. Materno'.ljust(10) +'|País'.ljust(16)+'|'+'Fecha nacimiento'.ljust(10)+'|' +' Sexo'.ljust(1)+'|')   
         print('-'*76)
         for record in directores:
-            print(f'{record[0]:<3}|{record[1]:<10}|{record[2]:<10}|{record[3]:<10}|{record[6]:<15}|   {record[4]}   |{record[5]}|')
+            if record[3] != None:
+                print(f'{record[0]:<3}|{record[1]:<10}|{record[2]:<10}|{record[3]:<10}|{record[6]:<15}|   {record[4]}   |{record[5]}|')
+            else:
+                print(f'{record[0]:<3}|{record[1]:<10}|{record[2]:<10}|          |{record[6]:<15}|   {record[4]}   |{record[5]}|')
         print('-'*76)
     
     def mostrar_director_header(self, header):
