@@ -192,7 +192,7 @@ class Model:
             return (err)
 
 
-    def update_director(self, id, nombre = '', apellido_paterno = '', apellido_materno = '', fecha_nacimiento = '', sexo = '', pais= ''):
+    def update_director(self, id, nombre, apellido_paterno, apellido_materno, fecha_nacimiento, sexo, pais):
         fields = []
         val = []
 
@@ -293,18 +293,17 @@ class Model:
         except connector.Error as err:
             return (err)  
 
-    def update_genero(self, id, descripcion = ''):
-        fields = []
-        val = []
+    def update_genero(self, id, descripcion):
+        if descripcion == '':
+            return False
 
-        if descripcion !='':
-            val.append(descripcion)
-            fields.append('descripcion = %s')
+        val = []
+        val.append(descripcion)
 
         val.append(id)
         val = tuple(val)         
         try:
-            sql = 'UPDATE generos SET ' + ','.join(fields) +' WHERE id_genero = %s;'
+            sql = 'UPDATE generos SET descripcion = %s WHERE id_genero = %s;'
 
             self.cursor.execute(sql,val)
             self.cnx.commit()
