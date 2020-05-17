@@ -330,10 +330,10 @@ class Model:
             return (err)
     ######################     metodos de peliculas        ###################
     ##########################################################################
-    def create_pelicula(self, id_genero, id_director, titulo, sinopsis, duracion, premiere, clasificacion, pais):
+    def create_pelicula(self, id_genero, id_director, titulo, sinopsis, premiere, duracion, clasificacion, pais):
         try:
-            sql = 'INSERT INTO peliculas(id_genero, id_director, titulo, sinopsis, duracion, premiere, clasificacion, pais) VALUES(%s,%s,%s,%s,%s,%s,%s,%s);'
-            values = (id_genero, id_director, titulo, sinopsis, duracion, premiere, clasificacion, pais)
+            sql = 'INSERT INTO peliculas(id_genero, id_director, titulo, sinopsis, premiere, duracion, clasificacion, pais) VALUES(%s,%s,%s,%s,%s,%s,%s,%s);'
+            values = (id_genero, id_director, titulo, sinopsis, premiere, duracion, clasificacion, pais)
             print(sql,values)
             self.cursor.execute(sql, values)
             self.cnx.commit()
@@ -376,7 +376,7 @@ class Model:
         except connector.Error as err:
             return (err)  
 
-    def update_pelicula(self, id, id_genero = '', id_director = '', titulo = '', sinopsis = '', duracion = '', premiere = '', clasificacion = '', pais = ''):
+    def update_pelicula(self, id, id_genero, id_director, titulo, sinopsis, duracion, premiere, clasificacion, pais):
         fields = []
         val = []
 
@@ -408,7 +408,7 @@ class Model:
         val.append(id)
         val = tuple(val)         
         try:
-            sql = 'UPDATE peliculas SET ' + ','.join(fields) +' WHERE id_pelicula =%s;'
+            sql = 'UPDATE peliculas SET ' + ','.join(fields) +' WHERE id_pelicula = %s;'
 
             self.cursor.execute(sql,val)
             self.cnx.commit()
@@ -422,7 +422,7 @@ class Model:
 
     def delete_pelicula(self, id):
         try:
-            sql = 'DELETE  FROM peliculas WHERE id_pelicula = %s;'
+            sql = 'DELETE FROM peliculas WHERE id_pelicula = %s;'
             values = (id,)
 
             self.cursor.execute(sql, values)

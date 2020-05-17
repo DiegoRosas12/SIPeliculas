@@ -40,10 +40,12 @@ CREATE TABLE IF NOT EXISTS peliculas (
   id_pelicula INT NOT NULL AUTO_INCREMENT,
   id_genero	INT NOT NULL,
   id_director INT NOT NULL,
-  titulo VARCHAR(45) NULL,
-  sinopsis VARCHAR(45) NULL,
-  premiere DATETIME NULL,
-  duracion VARCHAR(45) NULL,
+  titulo VARCHAR(45) NOT NULL,
+  sinopsis VARCHAR(45) NOT NULL,
+  premiere DATETIME NOT NULL,
+  duracion VARCHAR(45) NOT NULL,
+  clasificacion VARCHAR(45) NOT NULL,
+  pais VARCHAR(45) NOT NULL,
   CONSTRAINT fk_id_genero_peliculas FOREIGN KEY(id_genero)
     REFERENCES generos(id_genero)
     ON UPDATE CASCADE,
@@ -53,20 +55,19 @@ CREATE TABLE IF NOT EXISTS peliculas (
   PRIMARY KEY (id_pelicula)
  )ENGINE = InnoDB;
 
-
-  CREATE TABLE IF NOT EXISTS actores_peliculas(   
-  id_pelicula INT NOT NULL,      
-  id_actor INT NOT NULL,   
-  personaje VARCHAR(20) NOT NULL,
-  rol VARCHAR(20) NOT NULL,
-  CONSTRAINT fk_id_pelicula_actores_peliculas FOREIGN KEY(id_pelicula)
-    REFERENCES peliculas(id_pelicula)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  CONSTRAINT fk_id_actor_actores_peliculas FOREIGN KEY(id_actor)
-    REFERENCES actores(id_actor)  
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
-  PRIMARY KEY (id_pelicula, id_actor)
-  )ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS actores_peliculas(   
+ id_pelicula INT NOT NULL,      
+ id_actor INT NOT NULL,   
+ personaje VARCHAR(20) NOT NULL,
+ rol VARCHAR(20) NOT NULL,
+ CONSTRAINT fk_id_pelicula_actores_peliculas FOREIGN KEY(id_pelicula)
+   REFERENCES peliculas(id_pelicula)
+   ON DELETE CASCADE
+   ON UPDATE CASCADE,
+ CONSTRAINT fk_id_actor_actores_peliculas FOREIGN KEY(id_actor)
+   REFERENCES actores(id_actor)  
+   ON DELETE CASCADE
+   ON UPDATE CASCADE,
+ PRIMARY KEY (id_pelicula, id_actor)
+ )ENGINE = InnoDB;
 

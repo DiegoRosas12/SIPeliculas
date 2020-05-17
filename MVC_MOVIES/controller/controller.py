@@ -33,8 +33,7 @@ class Controller:
             elif o == '3':
                 self.menu_genero()
             elif o == '4':
-                #self.menu_pelicula()
-                pass
+                self.menu_pelicula()
             elif o == '0':
                 self.view.end()
                 return
@@ -426,4 +425,144 @@ class Controller:
                     self.view.error('Error al borrar género.')
         else:
             self.view.msg('El género no se borrará. Cancelando operación...')
+        return
+
+    """
+    *************************
+    * Peliculas controllers *
+    *************************
+    """
+    def menu_pelicula(self):
+        while True:
+            self.view.menu_pelicula()
+            self.view.select_opcion()
+            o = input()
+            if o == '1':
+                self.create_pelicula()
+            elif o == '2':
+                self.read_pelicula()
+            elif o == '3':
+                self.read_all_peliculas()
+            elif o == '4':
+                self.read_peliculas_titulo()
+            elif o == '5':
+                self.update_pelicula()
+            elif o == '6':
+                self.delete_pelicula()
+            elif o == '7':
+                #self.menu_rol()
+                pass
+            elif o == '0':
+                return
+            else:
+                self.view.opcion_invalid()
+    
+    def ask_pelicula(self):
+        self.view.ask('ID del Género: ')
+        p_genid = input()
+        self.view.ask('ID del Director: ')
+        p_dirid = input()
+        self.view.ask('Título: ')
+        p_titulo = input()
+        self.view.ask('Sinopsis: ')
+        p_sinopsis = input()
+        self.view.ask('Premiere: ')
+        p_premiere = input()
+        self.view.ask('Duración: ')
+        p_duracion = input()
+        self.view.ask('Clasificación: ')
+        p_clasificacion = input()
+        self.view.ask('País: ')
+        p_pais = input()
+        return [p_genid, p_dirid, p_titulo, p_sinopsis, p_premiere, p_duracion, p_clasificacion, p_pais]
+    
+    def create_pelicula(self):
+        p_genid, p_dirid, p_titulo, p_sinopsis, p_premiere, p_duracion, p_clasificacion, p_pais = self.ask_pelicula()
+        out = self.model.create_genero(p_genid, p_dirid, p_titulo, p_sinopsis, p_premiere, p_duracion, p_clasificacion, p_pais)
+        if out == True:
+            self.view.ok(p_titulo, 'agregó')
+        else:
+            self.view.error('No se pudo agregar la película.')
+        return
+    
+    def read_pelicula(self):
+        self.view.ask('ID de la película: ')
+        p_id = input()
+        pelicula = self.model.read_pelicula(p_id)
+        if type(pelicula) == tuple:
+            self.view.mostrar_pelicula_header(' Datos de la película '+p_id+' ')
+            self.view.mostrar_una_pelicula(pelicula)
+            self.view.mostrar_pelicula_midder()
+            self.view.mostrar_pelicula_footer()
+        else:
+            if pelicula == None:
+                self.view.error('Esta película NO existe.')
+            else:
+                self.view.error('Problema para leer película.')
+        return
+    
+    def read_all_peliculas(self):
+        peliculas = self.model.read_all_peliculas()
+        if type(peliculas) == list:
+            self.view.mostrar_todas_peliculas(peliculas)
+        else:
+            self.view.error('Error al leer todas las películas.')
+        return
+    
+    def read_peliculas_titulo(self):
+        self.view.ask('Título: ')
+        p_titulo = input()
+        pelicula = self.model.read_pelicula_titulo(p_titulo)
+        if type(pelicula) == tuple:
+            self.view.mostrar_pelicula_header(' Registro de película '+p_titulo+' ')
+            self.view.mostrar_una_pelicula(pelicula)
+            self.view.mostrar_pelicula_midder()
+            self.view.mostrar_pelicula_footer()
+        else:
+            if pelicula == None:
+                self.view.error('Esta película NO existe.')
+            else:
+                self.view.error('Problema para leer película.')
+        return
+    
+    def update_pelicula(self):
+        self.view.ask('ID de la película: ')
+        p_id = input()
+        pelicula = self.model.read_pelicula(p_id)
+        if type(pelicula) == tuple:
+            self.view.mostrar_pelicula_header(' Datos de la película '+p_id+' ')
+            self.view.mostrar_una_pelicula(pelicula)
+            self.view.mostrar_pelicula_midder()
+            self.view.mostrar_pelicula_footer()
+        else:
+            if pelicula == None:
+                self.view.error('Esta película NO existe.')
+            else:
+                self.view.error('Problema para leer película.')
+            return
+        self.view.msg('Ingresa los valores a modificar (vacío para dejarlo igual):')
+        p_genid, p_dirid, p_titulo, p_sinopsis, p_premiere, p_duracion, p_clasificacion, p_pais = self.ask_pelicula()
+        out = self.model.update_pelicula(p_id, p_genid, p_dirid, p_titulo, p_sinopsis, p_premiere, p_duracion, p_clasificacion, p_pais)
+        if out == True:
+            self.view.ok(p_id, 'actualizó')
+        else:
+            self.view.error('No se pudo actualizar la película.')
+        return
+    
+    def delete_pelicula(self):
+        self.view.ask('ID de la película a borrar: ')
+        p_id = input()
+        self.view.ask('¿Seguro que desea borrar esta película? (S = Sí) ')
+        confirm = input()
+        if confirm.lower() == 's':
+            count = self.model.delete_genero(p_id)
+            if count != 0:
+                self.view.ok(p_id, 'borró')
+            else:
+                if count == 0:
+                    self.view.error('La película NO existe.')
+                else:
+                    self.view.error('Error al borrar película.')
+        else:
+            self.view.msg('La película no se borrará. Cancelando operación...')
         return

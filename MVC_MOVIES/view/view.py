@@ -66,7 +66,7 @@ class View:
         print("4. Buscar actor por nombre")
         print("5. Actualizar actor")
         print("6. Borrar actor")  
-        print("0. Salir\n")
+        print("0. Volver al menú anterior\n")
 
     def mostrar_un_actor(self, actor):
         print('ID: ', actor[0])
@@ -114,7 +114,7 @@ class View:
         print("4. Buscar director por nombre")
         print("5. Actualizar director")
         print("6. Borrar director")  
-        print("0. Salir\n")
+        print("0. Volver al menú anterior\n")
 
     def mostrar_un_director(self, director):
         print('ID: ', director[0])
@@ -163,7 +163,7 @@ class View:
         print("4. Buscar género por nombre")
         print("5. Actualizar género")
         print("6. Borrar género")
-        print("0. Salir\n") 
+        print("0. Volver al menú anterior\n") 
 
     def mostrar_un_genero(self, genero):
         print('ID: ', genero[0])
@@ -203,7 +203,8 @@ class View:
         print("4. Buscar pelicula por titulo")
         print("5. Actualizar pelicula")
         print("6. Borrar pelicula")
-        print("0. Salir\n") 
+        print("7. Menú de roles")
+        print("0. Volver al menú anterior\n") 
 
     def mostrar_una_pelicula(self, pelicula):
         print('ID: ', pelicula[0])
@@ -250,7 +251,7 @@ class View:
         print("4. Buscar rol por nombre")
         print("5. Actualizar rol")
         print("6. Borrar rol")
-        print("0. Salir\n") 
+        print("0. Volver al menú anterior\n") 
 
     def mostrar_un_rol(self, rol):
         print('ID Pelicula: ', rol[0])
