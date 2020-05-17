@@ -450,8 +450,7 @@ class Controller:
             elif o == '6':
                 self.delete_pelicula()
             elif o == '7':
-                #self.menu_rol()
-                pass
+                self.menu_rol()
             elif o == '0':
                 return
             else:
@@ -565,4 +564,140 @@ class Controller:
                     self.view.error('Error al borrar película.')
         else:
             self.view.msg('La película no se borrará. Cancelando operación...')
+        return
+    
+    """
+    *********************
+    * Roles controllers *
+    *********************
+    """
+    def menu_rol(self):
+        while True:
+            self.view.menu_rol()
+            self.view.select_opcion()
+            o = input()
+            if o == '1':
+                self.create_rol()
+            elif o == '2':
+                self.read_un_rol()
+            elif o == '3':
+                self.read_all_roles()
+            elif o == '4':
+                self.read_roles_nombre()
+            elif o == '5':
+                self.update_rol()
+            elif o == '6':
+                self.delete_rol()
+            elif o == '0':
+                return
+            else:
+                self.view.opcion_invalid()
+    
+    def ask_rol(self):
+        self.view.ask('Personaje: ')
+        r_personaje = input()
+        self.view.ask('Rol: ')
+        r_rol = input()
+        return [r_personaje, r_rol]
+    
+    def create_rol(self):
+        self.view.ask('ID de la Película: ')
+        r_pelid = input()
+        self.view.ask('ID del Actor: ')
+        r_actid = input()
+        r_personaje, r_rol = self.ask_rol()
+        out = self.model.create_rol(r_pelid, r_actid, r_personaje, r_rol)
+        if out == True:
+            self.view.ok(r_actid+' en '+r_pelid, 'agregó')
+        else:
+            self.view.error('No se pudo agregar el rol.')
+        return
+    
+    def read_un_rol(self):
+        self.view.ask('ID de la película: ')
+        r_pelid = input()
+        self.view.ask('ID del actor: ')
+        r_actid = input()
+        rol = self.model.read_un_rol(r_pelid, r_actid)
+        if type(rol) == tuple:
+            self.view.mostrar_rol_header(' Datos del rol de '+rol[3]+' en '+rol[1]+' ')
+            self.view.mostrar_un_rol(rol)
+            self.view.mostrar_rol_midder()
+            self.view.mostrar_rol_footer()
+        else:
+            if rol == None:
+                self.view.error('Este rol NO existe.')
+            else:
+                self.view.error('Problema para leer rol.')
+        return
+    
+    def read_all_roles(self):
+        roles = self.model.read_all_roles()
+        if type(roles) == list:
+            self.view.mostrar_todos_roles(roles)
+        else:
+            self.view.error('Error al leer todos los roles.')
+        return
+    
+    def read_roles_nombre(self):
+        self.view.ask('Nombre del papel: ')
+        r_rol = input()
+        roles = self.model.read_roles_nombre(r_rol)
+        if type(roles) == list:
+            self.view.mostrar_rol_header(' Registro de rol \"'+r_rol+'\" ')
+            for rol in roles:
+                self.view.mostrar_un_rol(rol)
+                self.view.mostrar_rol_midder()
+            self.view.mostrar_rol_footer()
+        else:
+            if roles == None:
+                self.view.error('No existen registros de este rol.')
+            else:
+                self.view.error('Problema para leer roles.')
+        return
+    
+    def update_rol(self):
+        self.view.ask('ID de la película: ')
+        r_pelid = input()
+        self.view.ask('ID del actor: ')
+        r_actid = input()
+        rol = self.model.read_un_rol(r_pelid, r_actid)
+        if type(rol) == tuple:
+            self.view.mostrar_rol_header(' Datos del rol de '+rol[3]+' en '+rol[1]+' ')
+            self.view.mostrar_un_rol(rol)
+            self.view.mostrar_rol_midder()
+            self.view.mostrar_rol_footer()
+        else:
+            if rol == None:
+                self.view.error('Este rol NO existe.')
+            else:
+                self.view.error('Problema para leer rol.')
+            return
+        self.view.msg('Ingresa los valores a modificar (vacío para dejarlo igual):')
+        r_personaje, r_rol = self.ask_rol()
+        out = self.model.update_rol(r_pelid, r_actid, r_personaje, r_rol)
+        if out == True:
+            self.view.ok('El rol de '+rol[3]+' en '+rol[1], 'actualizó')
+        else:
+            self.view.error('No se pudo actualizar el rol.')
+        return
+    
+    def delete_rol(self):
+        self.view.ask('ID de la película: ')
+        r_pelid = input()
+        self.view.ask('ID del actor: ')
+        r_actid = input()
+        self.view.ask('¿Seguro que desea borrar este rol? (S = Sí) ')
+        confirm = input()
+        if confirm.lower() == 's':
+            count = self.model.delete_rol(r_pelid, r_actid)
+            if count != 0:
+                self.view.ok(r_actid+' en '+r_pelid, 'borró')
+            else:
+                if count == 0:
+                    self.view.error('El rol NO existe.')
+                else:
+                    self.view.error('Error al borrar rol.')
+        else:
+            self.view.msg('El rol no se borrará. Cancelando operación...')
         return

@@ -466,7 +466,7 @@ class Model:
             sql = 'SELECT * FROM roles WHERE rol LIKE %s;'
             values = (nombre,)
             self.cursor.execute(sql, values)
-            roles = self.cursor.fetchone()
+            roles = self.cursor.fetchall()
 
             return roles
         except connector.Error as err:
@@ -483,7 +483,7 @@ class Model:
         except connector.Error as err:
             return (err)  
 
-    def update_rol(self, id_pelicula, id_actor, personaje = '', rol = ''):
+    def update_rol(self, id_pelicula, id_actor, personaje, rol):
         fields = []
         val = []
 
@@ -499,7 +499,7 @@ class Model:
         val.append(id_actor)
         val = tuple(val)         
         try:
-            sql = 'UPDATE roles SET ' + ','.join(fields) +' WHERE id_pelicula =%s and id_actor = %s;'
+            sql = 'UPDATE roles SET ' + ','.join(fields) +' WHERE id_pelicula = %s and id_actor = %s;'
             self.cursor.execute(sql,val)
             self.cnx.commit()
             return True
@@ -509,7 +509,7 @@ class Model:
 
     def delete_rol(self, id_pelicula, id_actor):
         try:
-            sql = 'DELETE  FROM roles WHERE id_pelicula = %s AND id_actor = %s;'
+            sql = 'DELETE FROM roles WHERE id_pelicula = %s AND id_actor = %s;'
             values = (id_pelicula, id_actor)
 
             self.cursor.execute(sql, values)
